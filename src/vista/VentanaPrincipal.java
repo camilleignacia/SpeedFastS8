@@ -1,19 +1,13 @@
 package vista;
 
-import modelo.ControladorPedidos;
-
 import javax.swing.*;
 import java.awt.*;
-
 
 /** Ventana principal con navegación hacia las demás ventanas. */
 public class VentanaPrincipal extends JFrame {
 
-    private ControladorPedidos controlador;
-
-    /** Crea la ventana principal e inicializa el controlador compartido. */
+    /** Crea la ventana principal. */
     public VentanaPrincipal() {
-        this.controlador = new ControladorPedidos();
         inicializarVentana();
     }
 
@@ -26,7 +20,6 @@ public class VentanaPrincipal extends JFrame {
         setResizable(false);
         setLayout(new BorderLayout());
 
-        // Panel de título
         JPanel panelTitulo = new JPanel(new GridLayout(2, 1));
 
         JLabel lblTitulo = new JLabel("SPEEDFAST", SwingConstants.CENTER);
@@ -41,7 +34,6 @@ public class VentanaPrincipal extends JFrame {
         panelTitulo.add(lblSubtitulo);
         add(panelTitulo, BorderLayout.NORTH);
 
-        // Panel de botones
         JPanel panelBotones = new JPanel(new GridLayout(3, 1, 10, 10));
         panelBotones.setBorder(BorderFactory.createEmptyBorder(15, 60, 25, 60));
 
@@ -58,14 +50,8 @@ public class VentanaPrincipal extends JFrame {
         panelBotones.add(btnAsignar);
         add(panelBotones, BorderLayout.CENTER);
 
-        // Acciones
-        btnRegistrar.addActionListener(e ->
-                new VentanaRegistroPedido(controlador).setVisible(true));
-
-        btnListar.addActionListener(e ->
-                new VentanaListaPedidos(controlador).setVisible(true));
-
-        btnAsignar.addActionListener(e ->
-                new VentanaAsignacion(controlador).setVisible(true));
+        btnRegistrar.addActionListener(e -> new VentanaRegistroPedido().setVisible(true));
+        btnListar.addActionListener(e -> new VentanaListaPedidos().setVisible(true));
+        btnAsignar.addActionListener(e -> new VentanaAsignacion().setVisible(true));
     }
 }

@@ -5,9 +5,16 @@ import java.util.Random;
 /** Hilo que retira y entrega pedidos de la ZonaDeCarga compartida. */
 public class Repartidor implements Runnable {
 
-    private String nombre;
+    private int         id;
+    private String      nombre;
     private ZonaDeCarga zonaDeCarga;
-    private Random random;
+    private Random      random;
+
+    /** Constructor para mapear desde la base de datos. */
+    public Repartidor(int id, String nombre) {
+        this.id     = id;
+        this.nombre = nombre;
+    }
 
     /**
      * @param nombre      Nombre del repartidor.
@@ -19,6 +26,7 @@ public class Repartidor implements Runnable {
         this.random       = new Random();
     }
 
+    public int    getId()     { return id; }
     public String getNombre() { return nombre; }
 
     /** Retira pedidos uno a uno hasta que la zona quede vacía. */

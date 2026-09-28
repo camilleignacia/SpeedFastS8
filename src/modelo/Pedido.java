@@ -7,6 +7,7 @@ public class Pedido {
     private String direccionEntrega;
     private String tipo;
     private EstadoPedido estado;
+    private String repartidor;
 
     /**
      * @param id               Identificador único.
@@ -18,6 +19,7 @@ public class Pedido {
         this.direccionEntrega = direccionEntrega;
         this.tipo             = tipo;
         this.estado           = EstadoPedido.PENDIENTE;
+        this.repartidor       = "Sin asignar";
     }
 
     // Getters
@@ -26,12 +28,14 @@ public class Pedido {
     public String getDireccionEntrega() { return direccionEntrega; }
     public String getTipo()             { return tipo; }
     public EstadoPedido getEstado()     { return estado; }
+    public String getRepartidor()       { return repartidor; }
 
     // Setters
 
     public void setId(int id)                                { this.id = id; }
     public void setDireccionEntrega(String direccionEntrega) { this.direccionEntrega = direccionEntrega; }
     public void setTipo(String tipo)                         { this.tipo = tipo; }
+    public void setRepartidor(String repartidor)             { this.repartidor = repartidor; }
 
     /** @param nuevoEstado Estado a asignar usando el enum. */
     public void setEstado(EstadoPedido nuevoEstado) {

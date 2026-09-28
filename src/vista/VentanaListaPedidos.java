@@ -1,6 +1,6 @@
 package vista;
 
-import modelo.ControladorPedidos;
+import dao.PedidoDAO;
 import modelo.Pedido;
 
 import javax.swing.*;
@@ -11,17 +11,14 @@ import java.util.List;
 /** Muestra los pedidos registrados en una JTable. */
 public class VentanaListaPedidos extends JFrame {
 
-    private ControladorPedidos controlador;
-    private DefaultTableModel  modeloTabla;
+    private PedidoDAO         pedidoDAO;
+    private DefaultTableModel modeloTabla;
 
-
-    /** @param controlador Lista compartida de pedidos. */
-    public VentanaListaPedidos(ControladorPedidos controlador) {
-        this.controlador = controlador;
+    public VentanaListaPedidos() {
+        this.pedidoDAO = new PedidoDAO();
         inicializarVentana();
     }
 
-    /** Configura la tabla y el botón de refresco. */
     private void inicializarVentana() {
         setTitle("SpeedFast - Lista de Pedidos");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -29,18 +26,16 @@ public class VentanaListaPedidos extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // Título
         JLabel lblTitulo = new JLabel("Pedidos Registrados", SwingConstants.CENTER);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 16));
         lblTitulo.setBorder(BorderFactory.createEmptyBorder(15, 10, 10, 10));
         add(lblTitulo, BorderLayout.NORTH);
 
-        // Tabla con DefaultTableModel
-        String[] columnas = {"ID", "Dirección", "Tipo", "Estado"};
+        String[] columnas = {"ID", "Dirección", "Tipo", "Estado", "Repartidor"};
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // La tabla no es editable directamente
+                return false;
             }
         };
 
@@ -52,7 +47,6 @@ public class VentanaListaPedidos extends JFrame {
         JScrollPane scrollPane = new JScrollPane(tabla);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Botón para refrescar la tabla
         JPanel panelBoton = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panelBoton.setBorder(BorderFactory.createEmptyBorder(5, 0, 10, 0));
         JButton btnRefrescar = new JButton("Refrescar tabla");
@@ -62,20 +56,20 @@ public class VentanaListaPedidos extends JFrame {
 
         btnRefrescar.addActionListener(e -> cargarPedidos());
 
-        // Cargar los pedidos al abrir la ventana
         cargarPedidos();
     }
 
-    /** Vacía la tabla y la rellena con los pedidos actuales. */
+    /** Vacía la tabla y la rellena con los pedidos desde la BD. */
     private void cargarPedidos() {
         modeloTabla.setRowCount(0);
-        List<Pedido> pedidos = controlador.getPedidos();
+        List<Pedido> pedidos = pedidoDAO.listarTodos();
         for (Pedido p : pedidos) {
             modeloTabla.addRow(new Object[]{
                     p.getId(),
                     p.getDireccionEntrega(),
                     p.getTipo(),
-                    p.getEstado()
+                    p.getEstado(),
+                    p.getRepartidor()
             });
         }
     }
