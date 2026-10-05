@@ -1,11 +1,12 @@
-# SpeedFast - Conectando aplicaciones Java con bases de datos mediante JDBC
+# SpeedFast - Persistiendo datos con objetos y base de datos.
 
 ---
 
 ## Descripción General
-Actividad formativa de **Desarrollo Orientado a Objetos II** (Semana 7).
-Extiende el sistema SpeedFast incorporando persistencia de datos mediante
-conexión a una base de datos MySQL utilizando JDBC.
+Actividad sumativa de **Desarrollo Orientado a Objetos II** (Semana 8).
+Extiende el sistema SpeedFast implementando operaciones CRUD completas
+para repartidores, pedidos y entregas, conectadas a una base de datos
+MySQL mediante JDBC e integradas con una interfaz gráfica Swing.
 
 ---
 
@@ -28,10 +29,13 @@ src/
 │ ├── VentanaPrincipal.java
 │ ├── VentanaRegistroPedido.java
 │ ├── VentanaListaPedidos.java
+│ ├── VentanaRepartidores.java
+│ ├── VentanaEntregas.java
 │ └── VentanaAsignacion.java
 └── main/
 └── Main.java
 ```
+
 ---
 
 ## Base de datos
@@ -41,8 +45,8 @@ El script de creación se encuentra en `speedfast_db.sql` en la raíz del proyec
 
 **Tablas:**
 - `repartidor` — almacena los repartidores disponibles.
-- `pedido` — almacena los pedidos registrados.
-- `entrega` — registra la relación entre pedido y repartidor.
+- `pedido` — almacena los pedidos registrados. El ID se genera automáticamente.
+- `entrega` — registra la relación entre pedido y repartidor, con fecha y hora.
 
 **Para configurar la BD:**
 1. Ejecutar `speedfast_db.sql` en MySQL Workbench
@@ -56,18 +60,31 @@ El script de creación se encuentra en `speedfast_db.sql` en la raíz del proyec
 1. Instalar **MySQL Server** y ejecutar `speedfast_db.sql` en MySQL Workbench
 2. En `dao/ConexionDB.java` actualizar las credenciales con las propias:
 ```java
-   private static final String USUARIO  = "root";
-   private static final String PASSWORD = "contraseña";
+private static final String USUARIO  = "root";
+private static final String PASSWORD = "contraseña";
 ```
 3. Tener agregado el conector `mysql-connector-j-8.0.33.jar` al proyecto en IntelliJ
 
 ---
 
 ## Ventanas
-- **VentanaPrincipal:** menú de navegación con tres acciones disponibles.
-- **VentanaRegistroPedido:** formulario con validación que guarda pedidos en la BD.
-- **VentanaListaPedidos:** tabla con todos los pedidos registrados, incluyendo repartidor asignado.
-- **VentanaAsignacion:** asigna un repartidor a un pedido pendiente, inicia la entrega y guarda el registro en la BD.
+
+- **VentanaPrincipal:** menú de navegación con acceso a todas las funcionalidades del sistema.
+- **VentanaRegistroPedido:** formulario para registrar un nuevo pedido con dirección y tipo. El estado siempre inicia en PENDIENTE automáticamente y el ID lo genera la base de datos.
+- **VentanaListaPedidos:** tabla con todos los pedidos registrados. Permite filtrar por estado, editar y eliminar pedidos existentes.
+- **VentanaRepartidores:** gestión completa de repartidores — registrar nuevos, editar nombres y eliminar. Si un repartidor tiene entregas asociadas no puede eliminarse.
+- **VentanaEntregas:** tabla con todas las entregas registradas. Permite editar el repartidor, fecha y hora de una entrega, y eliminarla. Al eliminar una entrega el pedido asociado vuelve automáticamente a estado PENDIENTE.
+- **VentanaAsignacion:** asigna un repartidor a un pedido pendiente e inicia la entrega. El cambio de estado del pedido y el registro de la entrega se ejecutan dentro de una transacción para garantizar consistencia.
+
+---
+
+## Operaciones CRUD por entidad
+
+| Entidad | Crear | Leer | Actualizar | Eliminar |
+|---|---|---|---|---|
+| Repartidor | ✓ | ✓ | ✓ | ✓ |
+| Pedido | ✓ | ✓ | ✓ | ✓ |
+| Entrega | ✓ | ✓ | ✓ | ✓ |
 
 ---
 

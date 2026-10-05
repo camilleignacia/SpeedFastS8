@@ -2,34 +2,51 @@ package modelo;
 
 import java.util.Random;
 
-/** Hilo que retira y entrega pedidos de la ZonaDeCarga compartida. */
+/**
+ * Hilo que retira y entrega pedidos de la ZonaDeCarga compartida.
+ */
 public class Repartidor implements Runnable {
 
-    private int         id;
-    private String      nombre;
+    private int id;
+    private String nombre;
     private ZonaDeCarga zonaDeCarga;
-    private Random      random;
+    private Random random;
 
-    /** Constructor para mapear desde la base de datos. */
+    /**
+     * Constructor para mapear desde la base de datos.
+     */
     public Repartidor(int id, String nombre) {
-        this.id     = id;
+        this.id = id;
         this.nombre = nombre;
     }
 
     /**
-     * @param nombre      Nombre del repartidor.
-     * @param zonaDeCarga Zona de carga compartida.
+     * Constructor para usar el repartidor como hilo con una zona de carga.
      */
     public Repartidor(String nombre, ZonaDeCarga zonaDeCarga) {
-        this.nombre       = nombre;
-        this.zonaDeCarga  = zonaDeCarga;
-        this.random       = new Random();
+        this.nombre = nombre;
+        this.zonaDeCarga = zonaDeCarga;
+        this.random = new Random();
     }
 
-    public int    getId()     { return id; }
-    public String getNombre() { return nombre; }
+    /**
+     * Constructor para registrar un repartidor nuevo desde la interfaz.
+     */
+    public Repartidor(String nombre) {
+        this.nombre = nombre;
+    }
 
-    /** Retira pedidos uno a uno hasta que la zona quede vacía. */
+    public int getId() {
+        return id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    /**
+     * Retira pedidos uno a uno hasta que la zona quede vacía.
+     */
     @Override
     public void run() {
         Pedido pedido;
@@ -39,7 +56,9 @@ public class Repartidor implements Runnable {
         System.out.println("[Repartidor - " + nombre + "] Sin más pedidos. Turno finalizado.");
     }
 
-    /** @param pedido Pedido a procesar: EN_REPARTO → espera simulada → ENTREGADO. */
+    /**
+     * @param pedido Pedido a procesar: EN_REPARTO → espera simulada → ENTREGADO.
+     */
     private void procesarPedido(Pedido pedido) {
         try {
             pedido.setEstado(EstadoPedido.EN_REPARTO);
